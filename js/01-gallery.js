@@ -3,46 +3,62 @@ import { galleryItems } from './gallery-items.js';
 
 console.log(galleryItems);
 
-const galleryMarkUp = document.querySelector('.gallery');
+const galleryContainer = document.querySelector('.gallery');
+const galleryCardsSet = createGallery(galleryItems);
 
-const galleryEl = galleryItems
-    .map(({ preview, description, original }) => 
-    `<div class="gallery__item">
-        <a class="gallery__link" href="${original}">
-            <img
-            class="gallery__image"
-            src="${preview}"
-            data-source="${original}"
-            alt="${description}"
-            />
-        </a>
-    </div>`)
+function createGallery(galleryItems) {
+  return galleryItems
+    .map(({ original, preview, description }) => {
+      return `<div class="gallery__item" style= "border-radius: 5%; box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1)">
+  <a class="gallery__link" href="${original}" style= "border-radius: 5%; box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1)">
+    <img
+      class="gallery__image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+      style= "border-radius: 5%; box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1)"
+    />
+  </a>
+</div>`;
+    })
     .join('');
+}
 
-galleryMarkUp.insertAdjacentHTML('beforeend', galleryEl)
+galleryContainer.insertAdjacentHTML('beforeend', galleryCardsSet);
+galleryContainer.addEventListener('click', selectGalleryEl);
 
-galleryMarkUp.addEventListener('click', onImgClick)
+function selectGalleryEl(event) {
+  event.preventDefault();
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  const instance = basicLightbox.create(
+    `<img src="${event.target.dataset.source}" width="800" height="600" style= "border-radius: 5%; box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1)">`,
 
-function onImgClick(evt) {
-    evt.preventDefault();
+    {
+      onShow: () => {
+        window.addEventListener('keydown', onKeydownEsc);
+      },
+      onClose: () => {
+        window.removeEventListener('keydown', onKeydownEsc);
+      },
+    },
+  );
 
-    if (evt.target.nodeName !== 'IMG') {
-        return;
+  // instance.show();
+
+  const onKeydownEsc = event => {
+    console.log(event.code);
+    if (event.code === 'Escape') {
+      instance.close();
     }
+  };
+  // window.addEventListener('keydown', onKeydownEsc);
+  // window.removeEventListener('keydown', onKeydownEsc);
 
-    const modal = basicLightbox.create(
-        `<img src="${evt.target.dataset.source}" width="800" height="600">`,
-
-        {   onShow: () => window.addEventListener('keydown', onEscKeyPress),
-            onClose: () => window.removeEventListener('keydown', onEscKeyPress),
-        }
-    );
-    
-    modal.show();
-
-    function onEscKeyPress(evt) {   
-        if (evt.code === "Escape") {
-            modal.close();
-        }
-    }
+  instance.show();
 }
