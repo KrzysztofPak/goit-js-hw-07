@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nastia-h8/goit-js-hw-07.git"
+    "url": "git+https://github.com/KrzysztofPak/goit-js-hw-07.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nastia-h8/goit-js-hw-07/issues"
+    "url": "https://github.com/KrzysztofPak/goit-js-hw-07/issues"
   },
-  "homepage": "https://github.com/nastia-h8/goit-js-hw-07#readme",
+  "homepage": "https://github.com/KrzysztofPak/goit-js-hw-07#readme",
   "dependencies": {
     "express": "^4.18.1",
     "joi": "^17.6.0",
